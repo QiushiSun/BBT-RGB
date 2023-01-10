@@ -308,11 +308,11 @@ class LMForwardAPI:
             self.metric_name = 'YelpPMetric'
         elif task_name == 'MRPC':
             self.metric = MRPCMetric(args=args, target='labels', pred='logits', tokenizer=tokenizer)
-            self.metric_key = 'acc'
+            self.metric_key = 'f1'
             self.metric_name = 'MRPCMetric'
         elif task_name == 'SNLI':
             self.metric = SNLIMetric(args=args, target='labels', pred='logits', tokenizer=tokenizer)
-            self.metric_key = 'f1'
+            self.metric_key = 'acc'
             self.metric_name = 'SNLIMetric'
         elif task_name == 'TREC':
             self.metric = TRECMetric(args=args, target='labels', pred='logits', tokenizer=tokenizer)
@@ -330,6 +330,10 @@ class LMForwardAPI:
             self.metric = DBPediaMetric(args=args, target='labels', pred='logits', tokenizer=tokenizer)
             self.metric_key = 'acc'
             self.metric_name = 'DBPediaMetric'
+        elif task_name == 'RTE':
+            self.metric = RTEMetric(args=args, target='labels', pred='logits', tokenizer=tokenizer)
+            self.metric_key = 'acc'
+            self.metric_name = 'RTEMetric'
         else:
             raise NotImplementedError
         self.margin = self.metric.margin
@@ -496,107 +500,138 @@ class LMForwardAPI:
             # print('*******Use QQP multi-verbalizers*********')
         elif self.args.task_name == 'DBPedia':
             # multi_verb = get_multi_verb(self.args.task_name, self.args.seed)
+            # multi_interest_index = []
+            multi_verb = get_multi_verb(self.args.task_name, self.args.seed)
             multi_interest_index = []
             
+            for verb in multi_verb['Company']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Company")[1])
             multi_interest_index.append(self.tokenizer.encode("Records")[1])
             multi_interest_index.append(self.tokenizer.encode("Group")[1])
             multi_interest_index.append(self.tokenizer.encode("Corporation")[1])
             multi_interest_index.append(self.tokenizer.encode("Bank")[1])
 
+            for verb in multi_verb['Education']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Education")[1])
             multi_interest_index.append(self.tokenizer.encode("School")[1])
             multi_interest_index.append(self.tokenizer.encode("College")[1])
             multi_interest_index.append(self.tokenizer.encode("University")[1])
             multi_interest_index.append(self.tokenizer.encode("Academy")[1])
 
+            for verb in multi_verb['Artist']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Artist")[1])
             multi_interest_index.append(self.tokenizer.encode("Musician")[1])
             multi_interest_index.append(self.tokenizer.encode("Singer")[1])
             multi_interest_index.append(self.tokenizer.encode("Writer")[1])
             multi_interest_index.append(self.tokenizer.encode("Author")[1])
 
+            for verb in multi_verb['Athlete']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Athlete")[1])
             multi_interest_index.append(self.tokenizer.encode("Footballer")[1])
             multi_interest_index.append(self.tokenizer.encode("Baseball")[1])
             multi_interest_index.append(self.tokenizer.encode("Cricketer")[1])
             multi_interest_index.append(self.tokenizer.encode("American")[1])
 
+            for verb in multi_verb['Office']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Office")[1])
             multi_interest_index.append(self.tokenizer.encode("Politician")[1])
             multi_interest_index.append(self.tokenizer.encode("Statesman")[1])
             multi_interest_index.append(self.tokenizer.encode("Minister")[1])
             multi_interest_index.append(self.tokenizer.encode("Officer")[1])
 
+            for verb in multi_verb['Transportation']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Transportation")[1])
             multi_interest_index.append(self.tokenizer.encode("USS")[1])
             multi_interest_index.append(self.tokenizer.encode("HMS")[1])
             multi_interest_index.append(self.tokenizer.encode("SS")[1])
             multi_interest_index.append(self.tokenizer.encode("Ship")[1])
 
+            for verb in multi_verb['Building']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Building")[1])
             multi_interest_index.append(self.tokenizer.encode("House")[1])
             multi_interest_index.append(self.tokenizer.encode("District")[1])
             multi_interest_index.append(self.tokenizer.encode("Historic")[1])
             multi_interest_index.append(self.tokenizer.encode("Hospital")[1])
 
+            for verb in multi_verb['Natural']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Natural")[1])
             multi_interest_index.append(self.tokenizer.encode("River")[1])
             multi_interest_index.append(self.tokenizer.encode("Lake")[1])
             multi_interest_index.append(self.tokenizer.encode("Mountain")[1])
             multi_interest_index.append(self.tokenizer.encode("Creek")[1])
 
+            for verb in multi_verb['Village']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Village")[1])
             multi_interest_index.append(self.tokenizer.encode("Voivodeship")[1])
             multi_interest_index.append(self.tokenizer.encode("Country")[1])
             multi_interest_index.append(self.tokenizer.encode("Poland")[1])
             multi_interest_index.append(self.tokenizer.encode("West")[1])
 
+            for verb in multi_verb['Animal']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Animal")[1])
             multi_interest_index.append(self.tokenizer.encode("Horse")[1])
             multi_interest_index.append(self.tokenizer.encode("Mouse")[1])
             multi_interest_index.append(self.tokenizer.encode("Bat")[1])
             multi_interest_index.append(self.tokenizer.encode("Frog")[1])
 
+            for verb in multi_verb['Plant']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Plant")[1])
             multi_interest_index.append(self.tokenizer.encode("Bulbophyllum")[1])
             multi_interest_index.append(self.tokenizer.encode("Tillandsia")[1])
             multi_interest_index.append(self.tokenizer.encode("Ulmus")[1])
             multi_interest_index.append(self.tokenizer.encode("Buddleja")[1])
 
+            for verb in multi_verb['Album']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Album")[1])
             multi_interest_index.append(self.tokenizer.encode("Music")[1])
             multi_interest_index.append(self.tokenizer.encode("Live")[1])
             multi_interest_index.append(self.tokenizer.encode("Hits")[1])
             multi_interest_index.append(self.tokenizer.encode("Soundtrack")[1])
 
+            for verb in multi_verb['Film']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Film")[1])
             multi_interest_index.append(self.tokenizer.encode("Love")[1])
             multi_interest_index.append(self.tokenizer.encode("Story")[1])
             multi_interest_index.append(self.tokenizer.encode("Night")[1])
             multi_interest_index.append(self.tokenizer.encode("Girl")[1])
 
+            for verb in multi_verb['Written']:
+                multi_interest_index.append(self.tokenizer.encode(verb)[1])
             multi_interest_index.append(self.tokenizer.encode("Written")[1])
             multi_interest_index.append(self.tokenizer.encode("Journal")[1])
             multi_interest_index.append(self.tokenizer.encode("Magazine")[1])
             multi_interest_index.append(self.tokenizer.encode("Book")[1])
             multi_interest_index.append(self.tokenizer.encode("Novel")[1])
             
+
             multi_logits = logits[:, multi_interest_index]
-            c0 = multi_logits[:, :5].mean(dim=1)
-            c1 = multi_logits[:, 5:10].mean(dim=1)
-            c2 = multi_logits[:, 10:15].mean(dim=1)
-            c3 = multi_logits[:, 15:20].mean(dim=1)
-            c4 = multi_logits[:, 20:25].mean(dim=1)
-            c5 = multi_logits[:, 25:30].mean(dim=1)
-            c6 = multi_logits[:, 30:35].mean(dim=1)
-            c7 = multi_logits[:, 35:40].mean(dim=1)
-            c8 = multi_logits[:, 40:45].mean(dim=1)
-            c9 = multi_logits[:, 45:50].mean(dim=1)
-            c10 = multi_logits[:, 50:55].mean(dim=1)
-            c11 = multi_logits[:, 55:60].mean(dim=1)
-            c12 = multi_logits[:, 60:65].mean(dim=1)
-            c13 = multi_logits[:, 65:].mean(dim=1)
+            c0 = multi_logits[:, :10].mean(dim=1)
+            c1 = multi_logits[:, 10:20].mean(dim=1)
+            c2 = multi_logits[:, 20:30].mean(dim=1)
+            c3 = multi_logits[:, 30:40].mean(dim=1)
+            c4 = multi_logits[:, 40:50].mean(dim=1)
+            c5 = multi_logits[:, 50:60].mean(dim=1)
+            c6 = multi_logits[:, 60:70].mean(dim=1)
+            c7 = multi_logits[:, 70:80].mean(dim=1)
+            c8 = multi_logits[:, 80:90].mean(dim=1)
+            c9 = multi_logits[:, 90:100].mean(dim=1)
+            c10 = multi_logits[:, 100:110].mean(dim=1)
+            c11 = multi_logits[:, 110:120].mean(dim=1)
+            c12 = multi_logits[:, 120:130].mean(dim=1)
+            c13 = multi_logits[:, 130:].mean(dim=1)
             logits = torch.stack([c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13]).T
             # print('*******Use DBPedia multi-verbalizers*********')
         elif self.args.task_name == 'AGNews':
@@ -941,16 +976,16 @@ else:
         # 'c3': C3Loader,
     }
 
-@cache_results(cache_fn, _refresh=False)
-def get_data(task_name, tokenizer):
+@cache_results(cache_fn, _refresh=True)
+def get_data(task_name, tokenizer, data_loader):
     if task_name in ['AGNews', 'Yelp', 'DBPedia', 'SNLI']:
         splits = ['train', 'test']
     else:  # for datasets without test set, we use dev set
         splits = ['train', 'validation']
     if args.cat_or_add == 'cat':
-        data_bundle = DataLoader[task_name](tokenizer=tokenizer, n_prompt_tokens=n_prompt_tokens, data_dir=data_dir, args=args).my_load(splits, seed)
+        data_bundle = data_loader.my_load(splits, seed)
     else:
-        data_bundle = DataLoader[task_name](tokenizer=tokenizer, n_prompt_tokens=n_prompt_tokens, data_dir=data_dir, args=args).my_load(splits, seed)
+        data_bundle = data_loader.my_load(splits, seed)
     return data_bundle
 
 
@@ -1013,8 +1048,8 @@ def construct_true_few_shot_data(train_data, k_shot):
     new_dev_data.set_target("labels")
     return new_train_data, new_dev_data
 
-
-data_bundle = get_data(task_name=task_name, tokenizer=tokenizer)
+data_loader = DataLoader[task_name](tokenizer=tokenizer, n_prompt_tokens=n_prompt_tokens, data_dir=data_dir, args=args)
+data_bundle = get_data(task_name=task_name, tokenizer=tokenizer, data_loader=data_loader)
 if task_name in ['AGNews', 'Yelp', 'DBPedia', 'SNLI']:
     train_data, test_data = data_bundle.get_dataset('train'), data_bundle.get_dataset('test')
 else:

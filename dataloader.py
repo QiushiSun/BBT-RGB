@@ -19,10 +19,10 @@ LABEL_MAP = {
         'negative': 'bad',
     },
     'AGNews': {
-        'world': 'World',
-        'sports': 'Sports',
-        'business': 'Business',
-        'technology': 'Technology',
+        0: 'World',
+        1: 'Sports',
+        2: 'Business',
+        3: 'Technology',
     },
     'TREC': {
         'description': 'Description', 
@@ -33,13 +33,13 @@ LABEL_MAP = {
         'location': 'Location',
     },
     'MRPC': {
-        'Equivalent': 'Yes',
-        'NotEquivalent': 'No',
+        1: 'Yes',
+        0: 'No',
     },
     'SNLI': {
-        'Entailment': 'Yes',
-        'Neutral': 'Maybe',
-        'Contradiction': 'No',
+        0: 'Yes',
+        1: 'Maybe',
+        2: 'No',
     },
     'DBPedia': {
         0: "Company",
@@ -64,6 +64,10 @@ LABEL_MAP = {
     'QNLI': {
         "entailment": "Yes",
         "not_entailment": "No",
+    },
+    'RTE': {
+        0: "Yes",
+        1: "No",
     }
 }
 
@@ -115,7 +119,7 @@ def random_in_contexts(train_data_path, task_name):
     df = pd.read_csv(train_data_path, header=None, sep='\t', quoting=3)
     random_num_lst = np.random.randint(0, df.shape[0], size=3)
     for random_num in random_num_lst:
-        if task_name in ['MRPC', 'SNLI', 'QNLI', 'QQP']:
+        if task_name in ['MRPC', 'SNLI', 'QNLI', 'QQP', 'RTE']:
             in_contexts = df.iloc[random_num][0] + ' ? ' + LABEL_MAP[task_name][df.iloc[random_num][2]] + ' , ' + df.iloc[random_num][1] + ' '
 
         elif task_name in ['SST-2', 'Yelp']:
@@ -140,7 +144,7 @@ def select_in_contexts(train_data_path, incontext_select_path, task_name, seed):
     print('select_num:', select_num)
     res = ''
     df = pd.read_csv(train_data_path, header=None, sep='\t', quoting=3)
-    if task_name in ['MRPC', 'SNLI', 'QNLI', 'QQP']:
+    if task_name in ['MRPC', 'SNLI', 'QNLI', 'QQP', 'RTE']:
         in_contexts = df.iloc[select_num][0] + ' ? ' + LABEL_MAP[task_name][df.iloc[select_num][2]] + ' , ' + df.iloc[select_num][1] + ' '
 
     elif task_name in ['SST-2', 'Yelp']:
@@ -175,7 +179,7 @@ class SST2Loader(Loader):
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
     def convert_examples(self, example):
@@ -247,7 +251,7 @@ class YelpPLoader(Loader):
         self.args = args
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -319,7 +323,7 @@ class AGNewsLoader(Loader):
         self.args = args
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -395,7 +399,7 @@ class MRPCLoader(Loader):
         self.args = args
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -470,7 +474,7 @@ class SNLILoader(Loader):
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -549,7 +553,7 @@ class QNLILoader(Loader):
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -623,7 +627,7 @@ class QQPLoader(Loader):
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -690,25 +694,25 @@ class DBPediaLoader(Loader):
         self.n_prompt_tokens = n_prompt_tokens
         self.label2text = {
             0: "Company",
-            1: "EducationalInstitution",
+            1: "Education",
             2: "Artist",
             3: "Athlete",
-            4: "OfficeHolder",
-            5: "MeanOfTransportation",
+            4: "Office",
+            5: "Transportation",
             6: "Building",
-            7: "NaturalPlace",
+            7: "Natural",
             8: "Village",
             9: "Animal",
             10: "Plant",
             11: "Album",
             12: "Film",
-            13: "WrittenWork",
+            13: "Written",
         }
         self.args = args
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -785,7 +789,7 @@ class TRECLoader(Loader):
         self.args = args
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -879,7 +883,7 @@ class MRPCLoader(Loader):
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 
@@ -951,7 +955,7 @@ class RTELoader(Loader):
         self.print_flag = True
         if args.in_contexts:
             train_data_path = f'./{data_dir}/{args.task_name}/{args.seed}/train.tsv'
-            incontext_select_path = f'./incontext_select.csv'
+            incontext_select_path = f'./incontext_select_paper.csv'
             # self.in_contexts = random_in_contexts(train_data_path, args.task_name)
             self.in_contexts = select_in_contexts(train_data_path, incontext_select_path, args.task_name, args.seed)
 

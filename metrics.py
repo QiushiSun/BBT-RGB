@@ -247,20 +247,20 @@ class DBPediaMetric(MetricBase):
         if tokenizer is None:
             tokenizer = RobertaTokenizer.from_pretrained('roberta-large')
         self.label_map = {
-            tokenizer.encode('Company', add_special_tokens=False)[0]: 0,
-            tokenizer.encode('Education', add_special_tokens=False)[0]: 1,
-            tokenizer.encode('Artist', add_special_tokens=False)[0]: 2,
-            tokenizer.encode('Athlete', add_special_tokens=False)[0]: 3,
-            tokenizer.encode('Office', add_special_tokens=False)[0]: 4,
-            tokenizer.encode('Transportation', add_special_tokens=False)[0]: 5,
-            tokenizer.encode('Building', add_special_tokens=False)[0]: 6,
-            tokenizer.encode('Natural', add_special_tokens=False)[0]: 7,
-            tokenizer.encode('Village', add_special_tokens=False)[0]: 8,
-            tokenizer.encode('Animal', add_special_tokens=False)[0]: 9,
-            tokenizer.encode('Plant', add_special_tokens=False)[0]: 10,
-            tokenizer.encode('Album', add_special_tokens=False)[0]: 11,
-            tokenizer.encode('Film', add_special_tokens=False)[0]: 12,
-            tokenizer.encode('Written', add_special_tokens=False)[0]: 13,
+            tokenizer.encode("Company", add_special_tokens=False)[0]: 0,
+            tokenizer.encode("EducationalInstitution", add_special_tokens=False)[0]: 1,
+            tokenizer.encode("Artist", add_special_tokens=False)[0]: 2,
+            tokenizer.encode("Athlete", add_special_tokens=False)[0]: 3,
+            tokenizer.encode("OfficeHolder", add_special_tokens=False)[0]: 4,
+            tokenizer.encode("MeanOfTransportation", add_special_tokens=False)[0]: 5,
+            tokenizer.encode("Building", add_special_tokens=False)[0]: 6,
+            tokenizer.encode("NaturalPlace", add_special_tokens=False)[0]: 7,
+            tokenizer.encode("Village", add_special_tokens=False)[0]: 8,
+            tokenizer.encode("Animal", add_special_tokens=False)[0]: 9,
+            tokenizer.encode("Plant", add_special_tokens=False)[0]: 10,
+            tokenizer.encode("Album", add_special_tokens=False)[0]: 11,
+            tokenizer.encode("Film", add_special_tokens=False)[0]: 12,
+            tokenizer.encode("WrittenWork", add_special_tokens=False)[0]: 13,
         }
 
     def evaluate(self, pred, target, seq_len=None):
@@ -565,25 +565,25 @@ class TRECMetric(MetricBase):
                 'ce': ce_loss}
 
 
-class DBPediaMetric(TaskMetric):
-    def __init__(self, args=None, pred=None, target=None, seq_len=None, tokenizer=None):
-        super(DBPediaMetric, self).__init__(pred, target, seq_len, tokenizer)
-        self.label_map = {
-            tokenizer.encode("Company", add_special_tokens=False)[0]: 0,
-            tokenizer.encode("EducationalInstitution", add_special_tokens=False)[0]: 1,
-            tokenizer.encode("Artist", add_special_tokens=False)[0]: 2,
-            tokenizer.encode("Athlete", add_special_tokens=False)[0]: 3,
-            tokenizer.encode("OfficeHolder", add_special_tokens=False)[0]: 4,
-            tokenizer.encode("MeanOfTransportation", add_special_tokens=False)[0]: 5,
-            tokenizer.encode("Building", add_special_tokens=False)[0]: 6,
-            tokenizer.encode("NaturalPlace", add_special_tokens=False)[0]: 7,
-            tokenizer.encode("Village", add_special_tokens=False)[0]: 8,
-            tokenizer.encode("Animal", add_special_tokens=False)[0]: 9,
-            tokenizer.encode("Plant", add_special_tokens=False)[0]: 10,
-            tokenizer.encode("Album", add_special_tokens=False)[0]: 11,
-            tokenizer.encode("Film", add_special_tokens=False)[0]: 12,
-            tokenizer.encode("WrittenWork", add_special_tokens=False)[0]: 13,
-        }
+# class DBPediaMetric(TaskMetric):
+#     def __init__(self, args=None, pred=None, target=None, seq_len=None, tokenizer=None):
+#         super(DBPediaMetric, self).__init__(pred, target, seq_len, tokenizer)
+#         self.label_map = {
+#             tokenizer.encode("Company", add_special_tokens=False)[0]: 0,
+#             tokenizer.encode("EducationalInstitution", add_special_tokens=False)[0]: 1,
+#             tokenizer.encode("Artist", add_special_tokens=False)[0]: 2,
+#             tokenizer.encode("Athlete", add_special_tokens=False)[0]: 3,
+#             tokenizer.encode("OfficeHolder", add_special_tokens=False)[0]: 4,
+#             tokenizer.encode("MeanOfTransportation", add_special_tokens=False)[0]: 5,
+#             tokenizer.encode("Building", add_special_tokens=False)[0]: 6,
+#             tokenizer.encode("NaturalPlace", add_special_tokens=False)[0]: 7,
+#             tokenizer.encode("Village", add_special_tokens=False)[0]: 8,
+#             tokenizer.encode("Animal", add_special_tokens=False)[0]: 9,
+#             tokenizer.encode("Plant", add_special_tokens=False)[0]: 10,
+#             tokenizer.encode("Album", add_special_tokens=False)[0]: 11,
+#             tokenizer.encode("Film", add_special_tokens=False)[0]: 12,
+#             tokenizer.encode("WrittenWork", add_special_tokens=False)[0]: 13,
+#         }
 
 
 class QNLIMetric(TaskMetric):

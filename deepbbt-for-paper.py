@@ -1019,20 +1019,20 @@ def construct_true_few_shot_data(train_data, k_shot):
             new_dev_data.append(train_data[index])
             dev_label_count[label] += 1
     
-    save_data_dir = os.path.join('./paper-datasets', task_name, str(seed))
-    if not os.path.exists(save_data_dir):
-        os.makedirs(save_data_dir)
-        # with open('./original_paper_data/{}_train.csv'.format(task_name), 'w') as f:
-        #     train_original_data = f.readlines()
-        train_original_data = pd.read_csv('./original_paper_data/{}_train.csv'.format(task_name))
-        if task_name in ['AGNews', 'Yelp', 'MRPC', 'SNLI', 'DBPedia', 'RTE']:
-            new_origin_train_data = train_original_data.iloc[train_index_lst]
-            new_origin_dev_data = train_original_data.iloc[dev_index_lst]
-        else:
-            new_origin_train_data = train_original_data.loc[train_original_data['idx'].isin(train_index_lst)]
-            new_origin_dev_data = train_original_data.loc[train_original_data['idx'].isin(dev_index_lst)]
-        new_origin_train_data.to_csv(save_data_dir+'/train.csv', index=False)
-        new_origin_dev_data.to_csv(save_data_dir+'/dev.csv', index=False)
+    # save_data_dir = os.path.join('./paper-datasets', task_name, str(seed))
+    # if not os.path.exists(save_data_dir):
+    #     os.makedirs(save_data_dir)
+    #     # with open('./original_paper_data/{}_train.csv'.format(task_name), 'w') as f:
+    #     #     train_original_data = f.readlines()
+    #     train_original_data = pd.read_csv('./original_paper_data/{}_train.csv'.format(task_name))
+    #     if task_name in ['AGNews', 'Yelp', 'MRPC', 'SNLI', 'DBPedia', 'RTE']:
+    #         new_origin_train_data = train_original_data.iloc[train_index_lst]
+    #         new_origin_dev_data = train_original_data.iloc[dev_index_lst]
+    #     else:
+    #         new_origin_train_data = train_original_data.loc[train_original_data['idx'].isin(train_index_lst)]
+    #         new_origin_dev_data = train_original_data.loc[train_original_data['idx'].isin(dev_index_lst)]
+    #     new_origin_train_data.to_csv(save_data_dir+'/train.csv', index=False)
+    #     new_origin_dev_data.to_csv(save_data_dir+'/dev.csv', index=False)
 
     if model_name in ['t5-small', 't5-base', 't5-large', 't5-3b']:
         new_train_data.set_input("input_ids", "attention_mask", "decoder_input_ids", "decoder_attention_mask")

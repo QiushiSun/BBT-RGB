@@ -39,11 +39,7 @@ for task_name in "${task_name_lst[@]}"; do
     done
     # python -u test.py --task_name $task_name --cuda $cuda
 done
-
 python -u incontext_select_final.py
-
-
-
 
 endTime=`date +%Y%m%d-%H:%M`
 endTime_s=`date +%s`

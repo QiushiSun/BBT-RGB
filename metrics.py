@@ -235,7 +235,7 @@ class AGNewsMetric(MetricBase):
 
 
 class DBPediaMetric(MetricBase):
-    def __init__(self, pred=None, target=None, seq_len=None, tokenizer=None):
+    def __init__(self, args=None, pred=None, target=None, seq_len=None, tokenizer=None):
         super().__init__()
         self._init_param_map(pred=pred, target=target, seq_len=seq_len)
         self._pred = []

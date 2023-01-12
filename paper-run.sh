@@ -6,16 +6,17 @@ startTime_s=`date +%s`
 seed_lst=(42)
 task_name_lst=(RTE) # SST-2 Yelp AGNews DBPedia SNLI MRPC RTE
 offset_lst=(1000)
-device=cuda:3
+device=cuda:0
 model_name=roberta-large
 model_path=transformer_model/roberta-large
 loss_type=ce 
 sigma1=1
 sigma2=0.2
-budget=600
-budget2=200
+budget=8000
+budget2=0
 data_dir=paper-datasets-aligned
 eval_every=100
+alpha=0.5
 # --instruction
 # --in_contexts 
 # --multiVerbalizer
@@ -23,7 +24,7 @@ eval_every=100
 for task_name in "${task_name_lst[@]}"; do
     for seed in "${seed_lst[@]}"; do
         for offset in "${offset_lst[@]}"; do
-            python -u deepbbt-for-paper.py --in_contexts --instruction --multiVerbalizer --budget2 $budget2 --data_dir $data_dir --seed $seed --task_name $task_name --device $device --budget $budget --loss_type $loss_type --sigma1 $sigma1 --sigma2 $sigma2 --model_name $model_name --model_path $model_path --eval_every $eval_every --offset $offset
+            python -u deepbbt-for-paper.py --budget2 $budget2 --alpha $alpha --data_dir $data_dir --seed $seed --task_name $task_name --device $device --budget $budget --loss_type $loss_type --sigma1 $sigma1 --sigma2 $sigma2 --model_name $model_name --model_path $model_path --eval_every $eval_every --offset $offset
         done
     done
 done

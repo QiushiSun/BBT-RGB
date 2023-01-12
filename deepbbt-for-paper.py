@@ -58,6 +58,7 @@ parser.add_argument("--popsize", default=20, type=int)
 parser.add_argument("--bound", default=0, type=int)
 parser.add_argument("--sigma1", default=1, type=float)
 parser.add_argument("--sigma2", default=0.2, type=float)
+parser.add_argument("--alpha", default=1, type=float)
 parser.add_argument("--print_every", default=50, type=int)
 parser.add_argument("--eval_every", default=100, type=int)
 parser.add_argument("--device", default='cuda:3', type=str)
@@ -127,6 +128,7 @@ budget = args.budget
 bound = args.bound
 sigma1 = args.sigma1
 sigma2 = args.sigma2
+alpha = args.alpha
 if args.popsize > 0:
     popsize = args.popsize
 else:
@@ -282,7 +284,7 @@ class LMForwardAPI:
             mu_hat = np.mean(embedding.reshape(-1).detach().cpu().numpy())
             std_hat = np.std(embedding.reshape(-1).detach().cpu().numpy())
             mu = 0.0
-            std = std_hat / (np.sqrt(intrinsic_dim) * args.sigma1)
+            std = alpha * std_hat / (np.sqrt(intrinsic_dim) * args.sigma1)
             print('[Embedding] mu: {} | std: {} [RandProj]  mu: {} | std: {}'.format(mu_hat, std_hat, mu, std))
             for p in self.linear[0].parameters():
                 torch.nn.init.normal_(p, 0.0, std)
@@ -865,7 +867,7 @@ class LMForwardAPI:
                                 clip_round, mu_hat, std_hat, min_h, max_h))
                         # Calculating std dev for the random projection
                         mu = 0.0
-                        std = std_hat / (np.sqrt(intrinsic_dim) * args.sigma1)
+                        std = alpha * std_hat / (np.sqrt(intrinsic_dim) * args.sigma1)
                         print(' - Random Projection: mu=%.4f, std=%.4f' % (mu, std))
                         for p in self.linear[i + 1].parameters():
                             torch.nn.init.normal_(p, mu, std)
@@ -976,7 +978,7 @@ else:
         # 'c3': C3Loader,
     }
 
-@cache_results(cache_fn, _refresh=True)
+@cache_results(cache_fn, _refresh=False)
 def get_data(task_name, tokenizer, data_loader):
     if task_name in ['AGNews', 'Yelp', 'DBPedia', 'SNLI']:
         splits = ['train', 'test']

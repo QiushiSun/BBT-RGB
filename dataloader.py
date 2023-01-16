@@ -33,8 +33,8 @@ LABEL_MAP = {
         'location': 'Location',
     },
     'MRPC': {
-        1: 'Yes',
         0: 'No',
+        1: 'Yes',
     },
     'SNLI': {
         0: 'Yes',
@@ -267,7 +267,7 @@ class YelpPLoader(Loader):
                     prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('prompt:', prompt)
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             example['input_text'] = '%s . %s . It was %s .' % (prompt, example['text'], self.tokenizer.mask_token)
             example['target_text'] = self.label2text[example['label']]
@@ -344,7 +344,7 @@ class AGNewsLoader(Loader):
                 # prompt = prepad_prompt(instruction=instruction+in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
                 # print('prompt', prompt)
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
 
             example['input_text'] = '%s . %s News: %s' % (prompt, self.tokenizer.mask_token, example['text'])
@@ -419,7 +419,7 @@ class MRPCLoader(Loader):
                 # prompt = prepad_prompt(instruction=instruction+in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
                 # print('prompt', prompt)
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
 
             example['input_text'] = '%s . %s ? %s , %s' % (prompt, example['text1'], self.tokenizer.mask_token, example['text2'])
@@ -496,7 +496,7 @@ class SNLILoader(Loader):
                 # prompt = prepad_prompt(instruction=instruction+in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
                 # print('prompt: ', prompt)
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
 
             example['input_text'] = '%s . %s ? %s , %s' % (prompt, example['premise'], self.tokenizer.mask_token ,example['hypothesis'])
@@ -563,16 +563,16 @@ class QNLILoader(Loader):
             if self.args.instruction:
                 instruction = 'Your task is to judge the entailment relationship of two sentences as Yes, No based on their content.'
                 if self.args.in_contexts:
-                    prompt = prepad_prompt(instruction=instruction+self.in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
+                    prompt = prepad_prompt(instruction=instruction+self.in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('Inc_bs_prompt:', prompt)
                 else:
-                    prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
+                    prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('prompt:', prompt)
                 if self.print_flag == True:
                     print('prompt:', prompt)
                     self.print_flag = False
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             example['input_text'] = '%s . %s ? %s , %s' % (
                 prompt, example['text1'], self.tokenizer.mask_token, example['text2'])
@@ -637,16 +637,16 @@ class QQPLoader(Loader):
             if self.args.instruction:
                 instruction = 'Your task is to judge the entailment relationship of two sentences as Yes, No based on their content.'
                 if self.args.in_contexts:
-                    prompt = prepad_prompt(instruction=instruction+self.in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
+                    prompt = prepad_prompt(instruction=instruction+self.in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('Inc_bs_prompt:', prompt)
                 else:
-                    prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
+                    prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('prompt:', prompt)
                 if self.print_flag == True:
                     print('prompt:', prompt)
                     self.print_flag = False
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             example['input_text'] = '%s . %s ? %s , %s' % (
                 prompt, example['text1'], self.tokenizer.mask_token, example['text2'])
@@ -731,7 +731,7 @@ class DBPediaLoader(Loader):
                     print('prompt:', prompt)
                     self.print_flag = False
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             example['input_text'] = '%s [ Category: %s ] %s' % (prompt, self.tokenizer.mask_token, example['content'].strip())
             example['target_text'] = self.label2text[example['label']]
@@ -799,16 +799,16 @@ class TRECLoader(Loader):
             if self.args.instruction:
                 instruction = 'Your task is to classify the questions as description or entity or abbreviation or human or numeric or location based on its content . '      
                 if self.args.in_contexts:
-                    prompt = prepad_prompt(instruction=instruction+self.in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
+                    prompt = prepad_prompt(instruction=instruction+self.in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('Inc_bestSample_prompt:', prompt)
                 else:
-                    prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
+                    prompt = prepad_prompt(instruction=instruction, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer, offset=self.args.offset)
                     # print('prompt:', prompt)
                 # in_contexts = 'Entity question : What is a fear of bees ? Numeric question : What is Dick Clark \'s birthday ? Abbreviation question : What does BUD stand for ? '
                 # prompt = prepad_prompt(instruction=instruction+in_contexts, n_prompt_tokens=self.n_prompt_tokens, tokenizer=self.tokenizer)
                 # print('prompt', prompt)
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             # prompt = "Entity question : Stuart Hamblen is considered to be the first singing cowboy of which medium ? \
             #         Human question : Who are the nomadic hunting and gathering tribe of the Kalahari Desert in Africa ? \
@@ -901,7 +901,7 @@ class MRPCLoader(Loader):
                     print('prompt:', prompt)
                     self.print_flag = False
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             example['input_text'] = '%s . %s ? %s , %s' % (prompt, example['sentence1'], self.tokenizer.mask_token, example['sentence2'])
             example['target_text'] = self.label2text[example['label']]
@@ -914,7 +914,7 @@ class MRPCLoader(Loader):
         # load dataset with Huggingface's Datasets
         # dataset = datasets.load_dataset('glue', 'mrpc', split=split)
         dataset_dict = datasets.load_from_disk("./raw_datasets/glue_mrpc")
-        dataset = dataset_dict[split]        
+        dataset = dataset_dict[split]
         dataset = dataset.map(self.convert_examples, load_from_cache_file=False)
         print(dataset[0])
         dataset = dataset.map(partial(convert_to_features, tokenizer=self.tokenizer), batched=True, load_from_cache_file=False)
@@ -971,7 +971,7 @@ class RTELoader(Loader):
                     print('prompt:', prompt)
                     self.print_flag = False
             else:
-                offset = 1000
+                offset = self.args.offset
                 prompt = self.tokenizer.decode(list(range(offset, offset + self.n_prompt_tokens)))
             example['input_text'] = '%s . %s ? %s , %s' % (prompt, example['sentence1'], self.tokenizer.mask_token, example['sentence2'])
             example['target_text'] = self.label2text[example['label']]

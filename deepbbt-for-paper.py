@@ -51,8 +51,6 @@ parser.add_argument("--task_name", default='SNLI', type=str)
 parser.add_argument("--n_prompt_tokens", default=50, type=int)
 parser.add_argument("--intrinsic_dim", default=500, type=int)
 parser.add_argument("--k_shot", default=16, type=int)
-parser.add_argument("--dev_batch_size", default=128, type=int)
-parser.add_argument("--dev_sample_num", default=12800, type=int)
 parser.add_argument("--budget", default=8000, type=int)
 parser.add_argument("--popsize", default=20, type=int)
 parser.add_argument("--bound", default=0, type=int)
@@ -105,6 +103,7 @@ parser.add_argument("--offset", default=1000, type=int, help="offset for prompt 
 
 
 args = parser.parse_args()
+print(args)
 
 # below are free hyper-params
 model_name = args.model_name
@@ -355,7 +354,7 @@ class LMForwardAPI:
             perf = (pred == converted_target).sum() / len(target)
         elif self.metric_key == 'f1':
             perf = f1_score(converted_target.detach().cpu().numpy().tolist(),
-                            pred.detach().cpu().numpy().tolist(), average='macro')
+                            pred.detach().cpu().numpy().tolist())
         else:
             raise KeyError(f'[Metric] Only support [acc, f1], got {self.metric_key} instead.')
 
@@ -710,8 +709,9 @@ class LMForwardAPI:
             multi_logits = logits[:, multi_interest_index]
             c0 = multi_logits[:, :5].mean(dim=1)
             c1 = multi_logits[:, 5:].mean(dim=1)
-            logits = torch.stack([c0, c1]).T
-            # print('*******Use MRPC multi-verbalizers*********')
+            # logits = torch.stack([c0, c1]).T
+            logits = torch.stack([c1, c0]).T
+            print('*******Use MRPC reversed multi-verbalizers*********')
         elif self.args.task_name == 'RTE':
             multi_verb = get_multi_verb(self.args.task_name, self.args.seed)
             multi_interest_index = []
@@ -978,7 +978,7 @@ else:
         # 'c3': C3Loader,
     }
 
-@cache_results(cache_fn, _refresh=False)
+@cache_results(cache_fn, _refresh=True)
 def get_data(task_name, tokenizer, data_loader):
     if task_name in ['AGNews', 'Yelp', 'DBPedia', 'SNLI']:
         splits = ['train', 'test']

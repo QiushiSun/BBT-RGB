@@ -14,9 +14,7 @@ We describe BBT-RGB in this paper, a suite of straightforward and complementary 
 
 
 
-<img src="/Users/qiushisun/GitHub-Repos/BBT-RGB/images/BBT-RGB-Overview.png" alt="BBT-RGB-Overview" style="zoom:20%;" />
-
-
+<img src="./images/BBT-RGB-Overview.png" alt="BBT-RGB-Overview" style="zoom:20%;" />
 
 
 

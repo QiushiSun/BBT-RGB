@@ -1,4 +1,3 @@
-#!/bin/bash
 
 startTime=`date +%Y%m%d-%H:%M`
 startTime_s=`date +%s`
@@ -24,7 +23,7 @@ alpha=0.5
 for task_name in "${task_name_lst[@]}"; do
     for seed in "${seed_lst[@]}"; do
         for offset in "${offset_lst[@]}"; do
-            python -u deepbbt-for-paper.py --budget2 $budget2 --alpha $alpha --data_dir $data_dir --seed $seed --task_name $task_name --device $device --budget $budget --loss_type $loss_type --sigma1 $sigma1 --sigma2 $sigma2 --model_name $model_name --model_path $model_path --eval_every $eval_every --offset $offset
+            python -u bbtrgb.py --budget2 $budget2 --alpha $alpha --data_dir $data_dir --seed $seed --task_name $task_name --device $device --budget $budget --loss_type $loss_type --sigma1 $sigma1 --sigma2 $sigma2 --model_name $model_name --model_path $model_path --eval_every $eval_every --offset $offset
         done
     done
 done

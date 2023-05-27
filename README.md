@@ -42,12 +42,14 @@ Part of the codes are adapted from [Black-Box-Tuning](https://github.com/txsun19
 
 Please consider citing us if you find this repository useful.👇
 
-```tex
-@misc{sun2023rgb,
-    title     = "Make Prompt-based Black-Box Tuning Colorful: Boosting Model Generalization from Three Orthogonal Perspectives",
-    author    = "Sun, Qiushi and Han, ChengCheng and Chen, Nuo and Zhu, Renyu and Jingyang, Gong and Li, Xiang and Gao, Ming",
-    month     = "may",
-    year      = "2023"
+```bibtex
+@misc{sun2023bbtrgb,
+      title         = {Make Prompt-based Black-Box Tuning Colorful: Boosting Model Generalization from Three Orthogonal Perspectives}, 
+      author        = {Qiushi Sun and Chengcheng Han and Nuo Chen and Renyu Zhu and Jingyang Gong and Xiang Li and Ming Gao},
+      year          = {2023},
+      eprint        = {2305.08088},
+      archivePrefix = {arXiv},
+      primaryClass  = {cs.CL}
 }
 ```
 

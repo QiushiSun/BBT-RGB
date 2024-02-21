@@ -1,10 +1,12 @@
 # Make Prompt-based Black-Box Tuning Colorful: Boosting Model Generalization from Three Orthogonal Perspectives
 
-Work in Progress
+[![arXiv](https://img.shields.io/badge/arXiv-2304.00685-b31b1b.svg)](https://arxiv.org/abs/2305.08088) 
+![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## Updates
 
-- 2023/05/03: Release the first version of BBT-RGB, please check our [paper](qiushisun.github.io). 🌈
+- 2024/01/20: BBT-RGB is accepted by LREC-COLING 2024. 🎉
+- 2023/05/03: Release the first version of BBT-RGB, please check our [paper](https://arxiv.org/abs/2305.08088). 🌈
 
 
 
@@ -34,8 +36,7 @@ pip install sklearn
 
 ## Acknowledgement
 
-Part of the codes are adapted from [Black-Box-Tuning](https://github.com/txsun1997/Black-Box-Tuning), and we would like to extend our sincere appreciation to Xiang Li and Ming Gao for their invaluable suggestions regarding the methodology and presentation of this paper.
-
+This is also a prize-winning solution of the [First International Algorithm Case Competition: PLM Tuning, GD‑HK‑Macau Greater Bay Area](https://iacc.pazhoulab-huangpu.com/). Part of the codes are adapted from [Black-Box-Tuning](https://github.com/txsun1997/Black-Box-Tuning).
 
 
 ## Citation
